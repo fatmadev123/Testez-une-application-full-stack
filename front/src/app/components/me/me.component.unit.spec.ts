@@ -1,40 +1,3 @@
-import './login.cy'
-import './register.cy'
-import './session.detail.cy'
-import './sessions.form.cy'
-import './sessions.list.cy'
-import './me.cy'
-import './not-found.cy'
-import './guards.cy'
-14 h 25
-2 fichiers
- 
-
-me.cy.ts
-TypeScript
-
-
-
-not-found.cy.ts
-TypeScript
-
-
-
-
-Hichem BOUHLEL
-  14 h 39
-2 fichiers
- 
-
-logout.cy.ts
-TypeScript
-
-menu.cy.ts
-TypeScript
-
-
-Hichem BOUHLEL
-  14 h 45
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
@@ -53,13 +16,21 @@ describe('MeComponent', () => {
   const mockSessionService = {
     sessionInformation: {
       admin: true,
-      id: 1
-    }
-  }
+      id: 1,
+    },
+  };
   const mockUserService = {
-    getById: jest.fn().mockReturnValue(of({ id: 1, email: 'test@test.com', lastName: 'test', firstName: 'TEST', admin: true })),
-    delete: jest.fn()
-  }
+    getById: jest.fn().mockReturnValue(
+      of({
+        id: 1,
+        email: 'test@test.com',
+        lastName: 'test',
+        firstName: 'TEST',
+        admin: true,
+      })
+    ),
+    delete: jest.fn(),
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
@@ -69,14 +40,13 @@ describe('MeComponent', () => {
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
-        MatInputModule
+        MatInputModule,
       ],
       providers: [
         { provide: SessionService, useValue: mockSessionService },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

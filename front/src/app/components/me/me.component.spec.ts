@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session.service';
-
 import { MeComponent } from './me.component';
 import { User } from 'src/app/interfaces/user.interface';
 import { expect } from '@jest/globals';
@@ -19,7 +18,6 @@ describe('MeComponent', () => {
   let fixture: ComponentFixture<MeComponent>;
   let user: User;
   let router: Router;
-
   const mockSessionService = {
     sessionInformation: {
       admin: true,
@@ -48,7 +46,6 @@ describe('MeComponent', () => {
         { provide: Router, useValue: router },
       ],
     }).compileComponents();
-
     user = {
       id: 1,
       email: 'yoga@studio.com',
@@ -59,7 +56,6 @@ describe('MeComponent', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

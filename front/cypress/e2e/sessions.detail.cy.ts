@@ -1,4 +1,4 @@
-describe('Session informations spec', () => {
+describe('Session detail spec', () => {
   it('shows session detail', () => {
     cy.visit('/login');
 
