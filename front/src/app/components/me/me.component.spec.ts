@@ -6,27 +6,30 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session.service';
-import { MeComponent } from './me.component';
-import { User } from 'src/app/interfaces/user.interface';
 import { expect } from '@jest/globals';
-import { UserService } from 'src/app/services/user.service';
+import { MeComponent } from './me.component';
 import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 describe('MeComponent', () => {
   let component: MeComponent;
   let fixture: ComponentFixture<MeComponent>;
-  let user: User;
-  let router: Router;
   const mockSessionService = {
     sessionInformation: {
       admin: true,
       id: 1,
     },
-    logOut: jest.fn(),
   };
   const mockUserService = {
-    getById: jest.fn(),
+    getById: jest.fn().mockReturnValue(
+      of({
+        id: 1,
+        email: 'test@test.com',
+        lastName: 'test',
+        firstName: 'TEST',
+        admin: true,
+      })
+    ),
     delete: jest.fn(),
   };
   beforeEach(async () => {
@@ -43,43 +46,27 @@ describe('MeComponent', () => {
       providers: [
         { provide: SessionService, useValue: mockSessionService },
         { provide: UserService, useValue: mockUserService },
-        { provide: Router, useValue: router },
       ],
     }).compileComponents();
-    user = {
-      id: 1,
-      email: 'yoga@studio.com',
-      firstName: 'Admin',
-      lastName: 'Admin',
-      admin: true,
-      password: 'password',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should set component user attribute value with session user value on component init', () => {
-    let userServiceSpy = jest
-      .spyOn(mockUserService, 'getById')
-      .mockReturnValue(of(user));
-    fixture.detectChanges();
-    expect(component.user?.id).toBe(user.id);
+  it('should get user information', () => {
+    expect(mockUserService.getById).toHaveBeenCalled();
+    expect(component.user?.email).toBe('test@test.com');
   });
-
-  it('should call delete from userService after calling delete', () => {
-    let userServiceSpy = jest
-      .spyOn(mockUserService, 'delete')
-      .mockReturnValue(of(void 0));
+  it(`should call 'userService.delete()' when 'delete()' is called`, () => {
+    mockUserService.delete.mockReturnValueOnce(of());
     component.delete();
-    expect(userServiceSpy).toHaveBeenCalledWith(
-      mockSessionService.sessionInformation.id.toString()
-    );
+    expect(mockUserService.delete).toHaveBeenCalled();
+  });
+  it(`should call 'window.history.back()' when 'back()' is called`, () => {
+    jest.spyOn(window.history, 'back');
+    component.back();
+    expect(window.history.back).toHaveBeenCalled();
   });
 });
